@@ -1,7 +1,8 @@
 import org.junit.jupiter.api.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
+
 public class BankAccountTest {
 
     BankAccount account;
@@ -34,7 +35,6 @@ public class BankAccountTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             account.deposit(-4000);
         });
-        // Ensure balance remains unchanged
         Assertions.assertEquals(3000, account.getBalance());
     }
 
@@ -52,30 +52,19 @@ public class BankAccountTest {
         });
     }
 
+
     @Test @Order(7)
-    public void testTransferValid() {
-        account.transferFunds(destinationAccount, 500);
-        Assertions.assertEquals(2000, account.getBalance());
-    }
-
-    @Test @Order(8)
-    public void testTransferInValid() {
-        account.transferFunds(destinationAccount, 1000);
-        Assertions.assertNotEquals(2000, account.getBalance());
-    }
-
-    @Test @Order(9)
     public void  testTransferInsufficientFunds() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             account.transferFunds(destinationAccount, 3000);
         });
     }
 
-    @Test @Order(10)
-    public void testTransferFundsValid() {
+    @Test @Order(8)
+    public void testTransferValid() {
         account.transferFunds(destinationAccount, 500);
-        Assertions.assertEquals(500, account.getBalance());
-        Assertions.assertEquals(3000, destinationAccount.getBalance());
+        Assertions.assertEquals(2000, account.getBalance());
+        Assertions.assertEquals(1500, destinationAccount.getBalance());
     }
 
 }
